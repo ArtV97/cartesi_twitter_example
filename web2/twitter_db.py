@@ -387,27 +387,13 @@ def get_tweet_replies(conn, tweet_id):
     return cur.fetchall()
 
 
-def get_user_tweets(conn, username):
-    sql = ''' SELECT * FROM tweet WHERE username = ? '''
-
-    cur = conn.cursor()
-
-    try:
-        cur.execute(sql, (username,))
-    except Exception as e:
-        print(e)
-        return False
-    
-    return cur.fetchall()
-
-
 ###################################################################
 #                                                                 #
 #                              AUX                                #
 #                                                                 #
 ###################################################################
 def user_login(conn, username, password):
-    sql = ''' SELECT * FROM user WHERE username = ? AND password = ? '''
+    sql = ''' SELECT username, join_date FROM user WHERE username = ? AND password = ? '''
     cur = conn.cursor()
 
     password = sha256(password.encode()).hexdigest()
