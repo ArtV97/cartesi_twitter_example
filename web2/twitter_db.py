@@ -10,7 +10,7 @@ DATABASE_PATH = "./"
 ### :param db_file: database file
 ### :return: Connection object or None
 #######################################################
-def create_connection(db_file):
+def create_connection(db_file="twitter.db"):
     conn = None
     db_file = DATABASE_PATH + "/" + db_file
     try:
