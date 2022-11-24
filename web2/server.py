@@ -26,7 +26,7 @@ def build_files_map():
         elif extension == ".js":
             content_type = "application/javascript" # "text/javascript"
             charset = "utf-8"
-        elif extension == "png":
+        elif extension == ".png":
             content_type = "image/png"
         else:
             continue # ignore python files and "unknown" files

@@ -386,6 +386,35 @@ def get_tweet_replies(conn, tweet_id):
     
     return cur.fetchall()
 
+# get tweets that aren't a reply or a retweet
+def get_tweets_feed(conn):
+    sql = ''' SELECT * FROM tweet WHERE 
+            tweet_id NOT IN (SELECT reply_id FROM reply) AND
+            tweet_id NOT IN (SELECT retweet_id FROM retweet) '''
+
+    cur = conn.cursor()
+
+    try:
+        cur.execute(sql)
+    except Exception as e:
+        print(e)
+        return False
+    
+    return cur.fetchall()
+
+
+def count_tweets_feed(conn):
+    sql = ''' SELECT COUNT(*) FROM tweet WHERE 
+            tweet_id NOT IN (SELECT reply_id FROM reply) AND
+            tweet_id NOT IN (SELECT retweet_id FROM retweet) '''
+    cur = conn.cursor()
+
+    try:
+        cur.execute(sql)
+    except:
+        return False
+    
+    return cur.fetchone()[0]
 
 ###################################################################
 #                                                                 #
