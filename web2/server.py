@@ -89,10 +89,9 @@ class MyServer(BaseHTTPRequestHandler):
             print(func)
 
             try:
-                result.append(func(*args))
+                result.append({"success": True, "result": func(*args)})
             except Exception as e:
-                self.send_error(500, e)
-
+                result.append({"success": False, "result": str(e)})
 
         self.send_response(200) # 200 = ok
         self.send_header("Content-type", "application/json; charset=UTF-8")

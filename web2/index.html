@@ -8,6 +8,9 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     
@@ -17,25 +20,140 @@
 
     <title>Web2 Twitter Demo</title>
 </head>
+
+
+
+<!-- Log in Modal -->
+<div class="modal fade" id="logInModal" tabindex="-1" role="dialog" aria-labelledby="logInModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-block">
+                <div class="d-flex">
+                    <h5 class="modal-title fw-bold" id="fineModalLabel">Log in</h5>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-white py-2 px-3 float-end ms-auto"><i class="bi bi-x"></i></button>    
+                </div>
+                
+                <small class="modal-title text-muted d-block">Fill the info bellow</small>
+
+            </div>
+
+            <!-- BEGIN FORM -->
+            <form>
+
+                <!-- BEGIN MODAL BODY -->
+                <div class="modal-body">
+                        
+                    <div class="form-floating mb-2">
+                        <input type="text" autocomplete="username" class="form-control" id="username" name="username" value="">
+                        <label class="ms-1" for="username">Username</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="password" autocomplete="current-password" class="form-control" id="password" name="password" value="">
+                        <label class="ms-1" for="password">Password</label>
+                    </div>
+
+                <!-- END MODAL BODY -->
+                </div>
+                
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" id="fine-btn-submit" class="btn btn-light text-center" onclick="log_in()">Log In</button>
+                    </div>
+                </div>
+            
+            <!-- END FORM -->                 
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Post tweet Modal -->
+<div class="modal fade" id="tweetModal" tabindex="-1" role="dialog" aria-labelledby="tweetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="row p-3">
+                <img src="user.png" class="col-2 rounded-circle border", style="height: 75px; width: 75px;">
+            
+                <div class="col">
+                    <div>
+                        <span>You</span>
+                    </div>
+    
+                    <div>
+                        <input type="text" class="form-control mb-2" id="tweet_content1" placeholder="Say something?">
+                        <button type="button" class="btn btn-outline-dark float-end" onclick="post_tweet('tweet','tweet_content1','tweetModal')">Tweet</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reply tweet Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="row p-3">
+                <img src="user.png" class="col-2 rounded-circle border", style="height: 75px; width: 75px;">
+
+                <div class="col">
+                    <div>
+                        <span>You are replying</span>
+                        <span id="replying_to"></span>
+                    </div>
+    
+                    <div>
+                        <input type="text" class="form-control mb-2" id="tweet_content2" placeholder="Reply?">
+                        <button type="button" class="btn btn-outline-dark float-end" onclick="post_tweet('reply','tweet_content2','replyModal')">Reply</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Retweet tweet Modal -->
+<div class="modal fade" id="retweetModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="row p-3">
+                <img src="user.png" class="col-2 rounded-circle border", style="height: 75px; width: 75px;">
+
+                <div class="col">
+                    <div>
+                        <span>You are retweeting</span>
+                        <span id="retweet_to"></span>
+                    </div>
+    
+                    <div>
+                        <input type="text" class="form-control mb-2" id="tweet_content3" placeholder="Quote retweet?">
+                        <button type="button" class="btn btn-outline-dark float-end" onclick="post_tweet('retweet','tweet_content3','retweetModal')">Retweet</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <body style="background-color: floralwhite;">
     <div class="container-fluid py-2 row">
 
-        <div class="col-1 offset-2 text-center position-fixed">
-            <img src="user.png" class="border rounded-circle", style="height: 100px; width: 100px;">
-            <div class="text-center display-inline">
-                Username
-            </div>
-            <!-- <ul class="list-group list-group-flush">
-                <li class="list-group-item"><i class="bi bi-bell"></i> Notifications</li>
-            </ul> -->
-
-            <button type="button" class="btn btn-dark">Tweet</button>
-        </div>
+        <div id="user" class="col-1 offset-2 text-center position-fixed"></div>
 
         <div class="col-5 offset-3 border-start border-end">
-            <h1>Feed</h1>
+            <h1 class="text-center">"Twitter" Example</h1>
             <ul id="feed" class="list-group list-group-flush">
-                <li class="list-group-item" style="background-color: floralwhite;">
+                <li id="user_tweet" class="list-group-item" style="background-color: floralwhite;">
 
                     <div class="row p-1">
                         <img src="user.png" class="col-2 rounded-circle border", style="height: 75px; width: 75px;">
@@ -43,13 +161,11 @@
                         <div class="col">
                             <div>
                                 <span>You</span>
-                                <i class="bi bi-dot m-1"></i>
-                                <span>DD/MM/YYYY HH:MM:SS</span>
                             </div>
 
                             <div>
-                                <input type="text" class="form-control mb-2" id="tweet_content" placeholder="Say something?">
-                                <button type="submit" class="btn btn-outline-dark float-end" onclick="post_tweet()">Tweet</button>
+                                <input type="text" class="form-control mb-2" id="tweet_content0" placeholder="Say something?">
+                                <button type="button" class="btn btn-outline-dark float-end" onclick="post_tweet('tweet','tweet_content0')">Tweet</button>
                             </div>
                         </div>
                     </div>
@@ -74,5 +190,6 @@
 <script src="page_control.js"></script>
 <script>
     //query_db([ ["get_tweets"], ["get_user_tweets", "User 1"] ], console.log)
-    
+    update_user()
+    update_tweets()
 </script>

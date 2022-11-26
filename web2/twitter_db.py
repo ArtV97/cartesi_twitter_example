@@ -328,6 +328,18 @@ def get_replies(conn):
     return cur.fetchall()
   
 
+def get_tweet(conn, tweet_id):
+    sql = ''' SELECT * FROM tweet WHERE tweet_id = ? '''
+    cur = conn.cursor()
+
+    try:
+        cur.execute(sql, (username,))
+    except:
+        return False
+    
+    return cur.fetchone()[0]
+
+
 def get_user_tweets(conn, username):
     sql = ''' SELECT * FROM tweet WHERE username = ? '''
     cur = conn.cursor()
@@ -338,6 +350,48 @@ def get_user_tweets(conn, username):
         return False
     
     return cur.fetchall()
+
+def get_user_likes(conn, username):
+    sql = ''' SELECT tweet_id FROM like WHERE username = ? '''
+    cur = conn.cursor()
+
+    try:
+        cur.execute(sql, (username,))
+    except:
+        return False
+    
+    return list(map(lambda x: x[0], cur.fetchall()))
+
+
+def get_user_retweets(conn, username):
+    sql = ''' SELECT tweet_id FROM retweet WHERE
+        retweet_id IN (SELECT tweet_id FROM tweet WHERE username = ?)
+        '''
+    cur = conn.cursor()
+
+    try:
+        cur.execute(sql, (username,))
+    except Exception as e:
+        print(e)
+        return False
+    
+    return list(map(lambda x: x[0], cur.fetchall()))
+
+
+# Get tweets (id) that a given user replied
+def get_user_replies(conn, username):
+    sql = ''' SELECT tweet_id FROM reply WHERE
+        reply_id IN (SELECT tweet_id FROM tweet WHERE username = ?)
+        '''
+    cur = conn.cursor()
+
+    try:
+        cur.execute(sql, (username,))
+    except Exception as e:
+        print(e)
+        return False
+    
+    return list(map(lambda x: x[0], cur.fetchall()))
 
 
 # Get likes of a given tweet
@@ -457,10 +511,10 @@ if __name__ == "__main__":
 
     # create likes
     create_like(conn, 2, "User 1") # User 1 liked tweet 2
-    create_like(conn, 2, "User 3") # User 1 liked tweet 2
-    create_like(conn, 2, "User 5") # User 1 liked tweet 2
-    create_like(conn, 1, "User 2") # User 1 liked tweet 2
-    create_like(conn, 3, "User 4") # User 1 liked tweet 3
+    create_like(conn, 2, "User 3") # User 3 liked tweet 2
+    create_like(conn, 2, "User 5") # User 5 liked tweet 2
+    create_like(conn, 1, "User 2") # User 2 liked tweet 2
+    create_like(conn, 3, "User 4") # User 4 liked tweet 3
 
     # create retweets
     generate_retweet(conn, 3, "User 4", "11/16/2022 18:37:13", "User 4 quoted tweet 3 in his retweet")
